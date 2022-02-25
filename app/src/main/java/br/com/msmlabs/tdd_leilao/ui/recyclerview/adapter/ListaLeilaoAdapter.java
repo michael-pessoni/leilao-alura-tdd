@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import br.com.msmlabs.tdd_leilao.R;
@@ -51,16 +53,19 @@ public class ListaLeilaoAdapter extends RecyclerView.Adapter<ListaLeilaoAdapter.
 
         private final TextView descricao;
         private Leilao leilao;
+        private final TextView maiorLance;
 
         ViewHolder(View itemView) {
             super(itemView);
             descricao = itemView.findViewById(R.id.item_leilao_descricao);
+            maiorLance = itemView.findViewById(R.id.item_leilao_maior_lance);
             itemView.setOnClickListener(v -> onItemClickListener.onItemClick(leilao));
         }
 
         void vincula(Leilao leilao) {
             this.leilao = leilao;
             descricao.setText(leilao.getDescricao());
+            maiorLance.setText(String.valueOf(leilao.getMaiorLance()));
         }
 
     }
