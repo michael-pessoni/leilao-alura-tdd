@@ -144,4 +144,18 @@ public class LeilaoTest {
 
     }
 
+    @Test
+    public void deve_DevolverZeroParaMaiorLance_QuandoNaoRecebeNenhumLance(){
+        double maiorLanceDevolvido = CONSOLE.getMaiorLance();
+
+        assertEquals(0.0, maiorLanceDevolvido, DELTA);
+
+    }
+    @Test
+    public void deve_DevolverZeroParaMenorLance_QuandoNaoRecebeNenhumLance(){
+        double menorLanceDevolvido = CONSOLE.getMenorLance();
+
+        assertEquals(0.0, menorLanceDevolvido, DELTA);
+    }
+
 }
