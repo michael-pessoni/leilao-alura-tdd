@@ -2,15 +2,24 @@ package br.com.msmlabs.tdd_leilao.model;
 
 import static org.junit.Assert.*;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.List;
+
+import br.com.msmlabs.tdd_leilao.exceptions.LanceMenorQueUltimoLanceException;
+import br.com.msmlabs.tdd_leilao.exceptions.LanceSeguidoDoMesmoUsuarioException;
+import br.com.msmlabs.tdd_leilao.exceptions.UsuarioDeuCincoLancesException;
 
 public class LeilaoTest {
 
     public static final double DELTA = 0.0001;
     private final Leilao CONSOLE = new Leilao("Console");
     private final Usuario MICHAEL = new Usuario("Michael");
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void deve_DevolverMenorLance_QuandoRecebeApenasUmLance() {
@@ -139,27 +148,24 @@ public class LeilaoTest {
     }
 
     @Test
-    public void naoDeve_AdicionarLance_QuandoForMenorQueOMaiorLance(){
+    public void deve_LancarException_QuandoForMenorQueOMaiorLance(){
+        exception.expect(LanceMenorQueUltimoLanceException.class);
+
         CONSOLE.propoe(new Lance(MICHAEL,500.00));
-        CONSOLE.propoe(new Lance(new Usuario("Carol"),400.00));
+        CONSOLE.propoe(new Lance(new Usuario("Carol"), 400.00));
 
-        int quantidadeLancesDevolvida = CONSOLE.quantidadeLances();
-
-        assertEquals(1, quantidadeLancesDevolvida);
     }
 
     @Test
-    public void naoDeve_AdicionarLance_QuandoUsuárioForOMesmoDoUltimoLance(){
+    public void deve_LancarException_QuandoUsuárioForOMesmoDoUltimoLance(){
+        exception.expect(LanceSeguidoDoMesmoUsuarioException.class);
+
         CONSOLE.propoe(new Lance(MICHAEL, 400.0));
         CONSOLE.propoe(new Lance(new Usuario("Michael"), 500.0));
-
-        int quantidadeLancesDevolvida = CONSOLE.quantidadeLances();
-
-        assertEquals(1, quantidadeLancesDevolvida);
     }
 
-    @Test
-    public void naoDeve_AdicionarLance_QuandoDerCincoLances(){
+    @Test(expected = UsuarioDeuCincoLancesException.class)
+    public void deve_LancarException_QuandoDerCincoLances(){
         CONSOLE.propoe(new Lance(MICHAEL, 100));
         final Usuario CAROL = new Usuario("Carol");
         CONSOLE.propoe(new Lance(CAROL, 200));
@@ -172,11 +178,7 @@ public class LeilaoTest {
         CONSOLE.propoe(new Lance(MICHAEL, 900));
         CONSOLE.propoe(new Lance(CAROL, 1000));
         CONSOLE.propoe(new Lance(MICHAEL, 1100));
-        CONSOLE.propoe(new Lance(CAROL, 1200));
 
-        int quantidadeLancesDevolvido = CONSOLE.quantidadeLances();
-
-        assertEquals(10, quantidadeLancesDevolvido);
     }
 
 }
