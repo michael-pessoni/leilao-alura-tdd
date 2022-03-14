@@ -31,16 +31,6 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolverMenorLance_QuandoRecebeMaisDeUmLanceEmOrdemDecescente() {
-        CONSOLE.propoe(new Lance(MICHAEL, 5000.0));
-        CONSOLE.propoe(new Lance(new Usuario("Marcos"), 3000.0));
-
-        double menorLanceDevolvido = CONSOLE.getMenorLance();
-
-        assertEquals(3000.0, menorLanceDevolvido, DELTA);
-    }
-
-    @Test
     public void deve_DevolverMaiorLance_QuandoRecebeApenasUmLance() {
         CONSOLE.propoe(new Lance(MICHAEL, 200.00));
 
@@ -57,16 +47,6 @@ public class LeilaoTest {
         double maiorLanceDevolvido = CONSOLE.getMaiorLance();
 
         assertEquals(500.0,maiorLanceDevolvido, DELTA);
-    }
-
-    @Test
-    public void deve_DevolverMaiorLance_QuandoRecebeMaisDeUmLanceEmOrdemDecescente() {
-        CONSOLE.propoe(new Lance(MICHAEL, 5000.0));
-        CONSOLE.propoe(new Lance(new Usuario("Marcos"), 3000.0));
-
-        double maiorLanceDevolvido = CONSOLE.getMaiorLance();
-
-        assertEquals(5000.0, maiorLanceDevolvido, DELTA);
     }
 
     @Test
@@ -156,6 +136,47 @@ public class LeilaoTest {
         double menorLanceDevolvido = CONSOLE.getMenorLance();
 
         assertEquals(0.0, menorLanceDevolvido, DELTA);
+    }
+
+    @Test
+    public void naoDeve_AdicionarLance_QuandoForMenorQueOMaiorLance(){
+        CONSOLE.propoe(new Lance(MICHAEL,500.00));
+        CONSOLE.propoe(new Lance(new Usuario("Carol"),400.00));
+
+        int quantidadeLancesDevolvida = CONSOLE.quantidadeLances();
+
+        assertEquals(1, quantidadeLancesDevolvida);
+    }
+
+    @Test
+    public void naoDeve_AdicionarLance_QuandoUsuárioForOMesmoDoUltimoLance(){
+        CONSOLE.propoe(new Lance(MICHAEL, 400.0));
+        CONSOLE.propoe(new Lance(new Usuario("Michael"), 500.0));
+
+        int quantidadeLancesDevolvida = CONSOLE.quantidadeLances();
+
+        assertEquals(1, quantidadeLancesDevolvida);
+    }
+
+    @Test
+    public void naoDeve_AdicionarLance_QuandoDerCincoLances(){
+        CONSOLE.propoe(new Lance(MICHAEL, 100));
+        final Usuario CAROL = new Usuario("Carol");
+        CONSOLE.propoe(new Lance(CAROL, 200));
+        CONSOLE.propoe(new Lance(MICHAEL, 300));
+        CONSOLE.propoe(new Lance(CAROL, 400));
+        CONSOLE.propoe(new Lance(MICHAEL, 500));
+        CONSOLE.propoe(new Lance(CAROL, 600));
+        CONSOLE.propoe(new Lance(MICHAEL, 700));
+        CONSOLE.propoe(new Lance(CAROL, 800));
+        CONSOLE.propoe(new Lance(MICHAEL, 900));
+        CONSOLE.propoe(new Lance(CAROL, 1000));
+        CONSOLE.propoe(new Lance(MICHAEL, 1100));
+        CONSOLE.propoe(new Lance(CAROL, 1200));
+
+        int quantidadeLancesDevolvido = CONSOLE.quantidadeLances();
+
+        assertEquals(10, quantidadeLancesDevolvido);
     }
 
 }

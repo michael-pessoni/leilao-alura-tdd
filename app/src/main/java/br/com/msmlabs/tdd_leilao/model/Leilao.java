@@ -18,8 +18,29 @@ public class Leilao implements Serializable {
     }
 
     public void propoe(Lance lance){
-        lances.add(lance);
         double valorLance = lance.getValor();
+        if (maiorLance > valorLance){
+            return;
+        }
+        if(!lances.isEmpty()){
+            Usuario usuarioNovo = lance.getUsuario();
+            Usuario ultimoUsuario = lances.get(0).getUsuario();
+
+            if (ultimoUsuario.equals(usuarioNovo)){
+                return;
+            }
+            int lancesMesmoUsuario = 0;
+            for (Lance l:
+                 lances) {
+                Usuario usuarioExistente = l.getUsuario();
+                if (usuarioExistente.equals(usuarioNovo)){
+                    lancesMesmoUsuario++;
+                    if (lancesMesmoUsuario == 5) return;
+                }
+            }
+
+        }
+        lances.add(lance);
         if(lances.size() == 1){
             maiorLance = valorLance;
             menorLance = valorLance;
@@ -60,5 +81,9 @@ public class Leilao implements Serializable {
             quantidadeMaximaDeLances = 3;
         }
         return lances.subList(0, quantidadeMaximaDeLances);
+    }
+
+    public int quantidadeLances() {
+        return lances.size();
     }
 }

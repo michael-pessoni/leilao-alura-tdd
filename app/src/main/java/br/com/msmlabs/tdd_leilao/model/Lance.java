@@ -12,6 +12,10 @@ public class Lance implements Serializable, Comparable {
         this.valor = valor;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
     public double getValor() {
         return valor;
     }
